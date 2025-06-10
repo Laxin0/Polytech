@@ -1,3 +1,4 @@
+#include "data_types.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -5,8 +6,6 @@
 
 #define EPSILON 0.00000000001
 #define INVALID_INDEX -1
-
-//NOTE: Федор Пикус c++ 9ch
 
 int GenerateRandomInt(int min, int max){
     int x = std::rand() % (max + 1 - min);
@@ -19,27 +18,192 @@ double GenerateRandomDouble(double min, double max, int precision){
     return (max-min)/pow(10, precision) * randInt + min;
 }
 
-struct Rectangle{
-    double width;
-    double length;
-};
 
-struct Range{
-    double lhs, rhs;
-};
 
-Rectangle GetRandomRectangle(Range lengthRange, Range widthRange){
-    double width = GenerateRandomDouble(widthRange.lhs, widthRange.rhs, 2);
-    double length = GenerateRandomDouble(width, lengthRange.rhs, 2);
+bool DoubleGreat(double a, double b){ return a > b + EPSILON; }
+bool DoubleLess (double a, double b){ return a + EPSILON < b; }
+bool DoubleEq   (double a, double b){ return fabs(a - b) < EPSILON; }
+
+
+Rectangle GetRandomRectangle(Interval lengthInterv, Interval widthInterv){
+    double width = GenerateRandomDouble(widthInterv.lhs, widthInterv.rhs, 2);
+    double length = GenerateRandomDouble(width, lengthInterv.rhs, 2);
     Rectangle rect = {.width = width,
                       .length = length};
     return rect;
 }
 
+double Perimeter(Rectangle rect){
+    return rect.length * 2 + rect.width * 2;
+}
+
+int FindRectanglePer(Rectangle *rects, int size, Interval perInter){
+    for (int i = 0; i < size; ++i){
+        double per = Perimeter(rects[i]);
+        if (DoubleGreat(per, perInter.lhs) && DoubleLess(per, perInter.rhs)){
+            return i;
+        }
+    }
+    return INVALID_INDEX;
+}
+//TODO: поменять местами арг
+int FindRectangleIf(Rectangle *rects, int size, bool (*cond)(Rectangle, Interval), Interval interval){
+     for (int i = 0; i < size; ++i){
+        if (cond(rects[i], interval)){
+            return i;
+        }
+    }
+    return INVALID_INDEX;
+}
+
+bool IsPerInInterval(Rectangle rect, Interval interval){
+    double per = Perimeter(rect);
+    if ((DoubleGreat(per, interval.lhs) && DoubleLess(per, interval.rhs)) ||
+        DoubleEq(interval.lhs, per) || DoubleEq(interval.rhs, per)){
+        return true;
+    }
+    return false;
+}
+bool IsSquareInInterval(Rectangle rect, Interval interval){ // [45, 55]
+    double sq = rect.length * rect.width;
+    if ((DoubleGreat(sq, interval.lhs) && DoubleLess(sq, interval.rhs)) ||
+        DoubleEq(interval.lhs, sq) || DoubleEq(interval.rhs, sq)){
+        return true;
+    }
+    return false;
+}
+
+void Swap(Rectangle rects[], int i, int j){
+    Rectangle t = rects[i];
+    rects[i] = rects[j];
+    rects[j] = t;
+}
+
+void InsertionSortByPer(Rectangle rects[], int size){
+    for(int i = 1; i < size; ++i){
+        for(int j = i; j > 0; --j){
+            if(DoubleLess(Perimeter(rects[j]), Perimeter(rects[j-1]))){
+                Swap(rects, j, j-1);
+            }else{
+                break;
+            }
+        }
+    }
+}
+
+void InsertionSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle)){
+    for(int i = 1; i < size; ++i){
+        for(int j = i; j > 0; --j){
+            if(!cmp(rects[j], rects[j-1])){
+                Swap(rects, j, j-1);
+            }else{
+                break;
+            }
+        }
+    }
+}
+
+bool IsPerimGt(Rectangle a, Rectangle b){
+    return Perimeter(a) > Perimeter(b) + EPSILON;
+}
+
+void TestGenerateRandomDoubleBounds(){
+    int c = 0;
+    for(int i = 0; i < 1100000; ++i){
+        double rand = GenerateRandomDouble(-10, 99, 3);
+        if(rand < -10.35 || rand > 99.875) c++;
+    }
+    if(c == 0){
+        std::cout << "TestGenerateRandomDoubleBounds: OK\n";
+    }else{
+        std::cout << "TestGenerateRandomDoubleBounds: FAILED\n";
+    }
+}
+
+void TestGenerateRandomIntBounds(){
+    int c = 0;
+    for(int i = 0; i < 1100000; ++i){
+        int rand = GenerateRandomInt(-10, 99);
+        if(rand < -10 || rand > 99) c++;
+    }
+    if(c == 0){
+        std::cout << "TestGenerateRandomIntBounds: OK\n";
+    }else{
+        std::cout << "TestGenerateRandomIntBounds: FAILED\n";
+    }
+}
+
+void TestGenerateRandomIntDistribution(){
+    int average = 1100000/110;
+    int acuracy = 500;
+    int errors = 0;
+
+    int numsc[110];
+    for(int i = 0; i < 110; ++i){
+        numsc[i] = 0;
+    }
+
+    for (int i = 0; i < 1100000; ++i){
+        int rand = GenerateRandomInt(-10, 99);
+        numsc[rand+10]++;
+    }
+
+    for(int i = 0; i < 110; ++i){
+        if (numsc[i] < average-acuracy || numsc[i] > average+acuracy){
+            errors++;
+            std::cout << i-10 << ": " << numsc[i] << "\n";
+        }
+        //std::cout << i-10 << ": " << numsc[i] << "\n";
+    }
+
+    if(errors == 0){
+         std::cout << "TestGenerateRandomIntDistribution: OK\n";
+    }else{
+         std::cout << "TestGenerateRandomIntDistribution: FAILED\n";
+    }
+}
+
+void TestGenerateRandomDoubleDistribution(){
+    int numsc[10];
+    int average = 1000000/10;
+    int accuracy = 4000;
+    int errors = 0;
+
+    for(int i = 0; i < 10; ++i){
+        numsc[i] = 0;
+    }
+    
+    double step = (99.875+10.35)/10;
+
+    for(int n = 0; n < 1000000; ++n){
+        int rand = GenerateRandomDouble(-10.35, 99.875, 6);
+        int i = 0;
+        for(double s = -10.35; s < 99.875; s += step){
+            if (rand >= s && rand < s+step){
+                numsc[i]++;
+                break;
+            }
+            i++;
+        }
+    }
+
+    for(int i = 0; i<10;++i){
+        if(numsc[i] < average-accuracy || numsc[i] > average+accuracy){
+            errors++;
+            std::cout << numsc[i] << "\n";
+        }
+    }
+    if(errors == 0){
+        std::cout << "TestGenerateRandomDoubleDistribution: OK\n";
+    }else{
+        std::cout << "TestGenerateRandomDoubleDistribution: FAILED\n";   
+    }
+}
+
 void TestGetRandomRectangleAspect(){
     int errors = 0;
     for (int i = 0; i < 10000; ++i){
-        Rectangle rect = GetRandomRectangle(Range{-10, 100}, Range{-10, 100});
+        Rectangle rect = GetRandomRectangle(Interval{-10, 100}, Interval{-10, 100});
         if (rect.length <= rect.width-EPSILON){
             std::cout << "width: " << rect.width << " length: " << rect.length << std::endl;
             errors++;
@@ -53,39 +217,14 @@ void TestGetRandomRectangleAspect(){
 
 }
 
-double Perimeter(Rectangle rect){
-    return rect.length * 2 + rect.width * 2;
-}
-
-int FindRectanglePer(Rectangle *rects, int size, Range perRange){
-    for (int i = 0; i < size; ++i){
-        double per = Perimeter(rects[i]);
-        if (per >= perRange.lhs + EPSILON && per < perRange.rhs - EPSILON){
-            return i;
-        }
-    }
-    return INVALID_INDEX;
-}
-
-int FindRectangle(Rectangle *rects, int size, bool (*cond)(Rectangle)){
-     for (int i = 0; i < size; ++i){
-        if (cond(rects[i])){
-            return i;
-        }
-    }
-    return INVALID_INDEX;
-}
-
-// void TestFindRectanglePerBouds
-
 void TestFindRectanglePerFound1(){
     Rectangle rects[] = {
         Rectangle{10, 10}, // 40
-        Rectangle{10, -15}, // 50
+        Rectangle{10, 15}, // 50
         Rectangle{30, 40}  // 140
     };
 
-    int i = FindRectanglePer(rects, 3, Range{45, 55}); 
+    int i = FindRectanglePer(rects, 3, Interval{45, 55}); 
     if (i == 1){
         std::cout << "TestFindRectanglePerFound1: OK" << std::endl;
     }else{
@@ -101,7 +240,7 @@ void TestFindRectanglePerNotFound(){
         Rectangle{30, 40}  // 140
     };
 
-    int i = FindRectanglePer(rects, 3, Range{55, 100}); 
+    int i = FindRectanglePer(rects, 3, Interval{55, 100}); 
     if (i == INVALID_INDEX){
         std::cout << "TestFindRectanglePerNotFound: OK" << std::endl;
     }else{
@@ -110,41 +249,61 @@ void TestFindRectanglePerNotFound(){
     }
 }
 
-bool IsPerInRange(Rectangle rect){ // [45, 55]
-    double per = Perimeter(rect);
-    if (per > 45 + EPSILON && per + EPSILON < 55){
-        return true;
+void TestFindRectangleIfBounds(){
+    Rectangle rects[] = {
+        Rectangle{10, 10}, // 40
+        Rectangle{10, 15}, // 50
+        Rectangle{30, 40}  // 140
+    };
+    
+    int i = FindRectangleIf(rects, 3, IsPerInInterval, Interval{40, 45}); 
+    if (i != 0){
+        std::cout << "Expected 0, but got " << i << std::endl;
+        std::cout << "TestFindRectangleIfBounds: FAILED" << std::endl;
+        return;
     }
-    return false;
+    i = FindRectangleIf(rects, 3, IsPerInInterval, Interval{42, 50}); 
+    if (i != 1){
+        std::cout << "Expected 1, but got " << i << std::endl;
+        std::cout << "TestFindRectangleIfBounds: FAILED" << std::endl;
+        return;
+    }
+    std::cout << "TestFindRectangleIfBounds: OK" << std::endl; 
 }
 
-bool IsLengthGt42(Rectangle rect){ return rect.length > 42; }
-    
-int main(){ 
-    std::srand(std::time(NULL));
-    Rectangle rects[] = {
-        Rectangle{10, 10},   // 40
-        Rectangle{10, 15},   // 50
-        Rectangle{30, 40},   // 140
-        Rectangle{43, 43},
-        Rectangle{-20, 50},  // 60
-        Rectangle{-20, -20}, //-80
-    };
- 
-    // std::cout << "0..3 IsPerInRange: " << FindRectangle(rects, 3, IsPerInRange) << std::endl;
-    // std::cout << "0..3 IsLengthGt42: " << FindRectangle(rects, 3, IsLengthGt42) << std::endl;
-    // std::cout << "0..4 IsLengthGt42: " << FindRectangle(rects, 4, IsLengthGt42) << std::endl;
-    
-    std::cout << "Bound 40..42: " <<
-    FindRectanglePer(rects, sizeof(rects)/sizeof(rects[0]), Range{40, 42}) << std::endl; 
-
-    std::cout << "Neg: " <<
-    FindRectanglePer(rects, sizeof(rects)/sizeof(rects[0]), Range{59, 61}) << std::endl; 
-    
+void RunAllTests(){
+    TestGenerateRandomDoubleBounds();
+    TestGenerateRandomIntBounds();
+    TestGenerateRandomIntDistribution();
+    TestGenerateRandomDoubleDistribution();
     TestGetRandomRectangleAspect();
     TestFindRectanglePerFound1();
     TestFindRectanglePerNotFound();
-    return 0;
+    TestFindRectangleIfBounds();
 }
 
+int main(){ 
+    std::srand(std::time(NULL));
+    Rectangle rects[] = {
+        Rectangle{10, 10},   // 40  20
+        Rectangle{10, 15},   // 50  150
+        Rectangle{30, 40},   // 140 1200
+        Rectangle{-20, 50},  // 60  -1000
+        Rectangle{-20, -20}, //-80  400
+    };
+    
+    std::cout << "Before: " << std::endl;
+    for(int i = 0; i < 5; ++i){
+        std::cout << Perimeter(rects[i]) << std::endl;
+    }
+    RunAllTests();
+    //InsertionSortByPer(rects, 5);
+    InsertionSort(rects, 5, IsPerimGt);
 
+    std::cout << "After: " << std::endl;
+    for(int i = 0; i < 5; ++i){
+        std::cout << Perimeter(rects[i]) << std::endl;
+    }
+
+    return 0;
+}
