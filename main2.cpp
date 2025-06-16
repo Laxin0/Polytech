@@ -1,90 +1,10 @@
 #include "data_types.h"
 #include "data_generator.h"
+#include "poly_algs.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include <cmath>
-
-#define EPSILON 0.00000000001
-#define INVALID_INDEX -1
-
-bool DoubleGreat(double a, double b){ return a > b + EPSILON; }
-bool DoubleLess (double a, double b){ return a + EPSILON < b; }
-bool DoubleEq   (double a, double b){ return fabs(a - b) < EPSILON; }
-
-double Perimeter(Rectangle rect){
-    return rect.length * 2 + rect.width * 2;
-}
-
-int FindRectanglePer(Rectangle *rects, int size, Interval perInter){
-    for (int i = 0; i < size; ++i){
-        double per = Perimeter(rects[i]);
-        if (DoubleGreat(per, perInter.lhs) && DoubleLess(per, perInter.rhs)){
-            return i;
-        }
-    }
-    return INVALID_INDEX;
-}
-//TODO: поменять местами арг
-int FindRectangleIf(Rectangle *rects, int size, bool (*cond)(Rectangle, Interval), Interval interval){
-     for (int i = 0; i < size; ++i){
-        if (cond(rects[i], interval)){
-            return i;
-        }
-    }
-    return INVALID_INDEX;
-}
-
-bool IsPerInInterval(Rectangle rect, Interval interval){
-    double per = Perimeter(rect);
-    if ((DoubleGreat(per, interval.lhs) && DoubleLess(per, interval.rhs)) ||
-        DoubleEq(interval.lhs, per) || DoubleEq(interval.rhs, per)){
-        return true;
-    }
-    return false;
-}
-bool IsSquareInInterval(Rectangle rect, Interval interval){ // [45, 55]
-    double sq = rect.length * rect.width;
-    if ((DoubleGreat(sq, interval.lhs) && DoubleLess(sq, interval.rhs)) ||
-        DoubleEq(interval.lhs, sq) || DoubleEq(interval.rhs, sq)){
-        return true;
-    }
-    return false;
-}
-
-void Swap(Rectangle rects[], int i, int j){
-    Rectangle t = rects[i];
-    rects[i] = rects[j];
-    rects[j] = t;
-}
-
-void InsertionSortByPer(Rectangle rects[], int size){
-    for(int i = 1; i < size; ++i){
-        for(int j = i; j > 0; --j){
-            if(DoubleLess(Perimeter(rects[j]), Perimeter(rects[j-1]))){
-                Swap(rects, j, j-1);
-            }else{
-                break;
-            }
-        }
-    }
-}
-
-void InsertionSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle)){
-    for(int i = 1; i < size; ++i){
-        for(int j = i; j > 0; --j){
-            if(!cmp(rects[j], rects[j-1])){
-                Swap(rects, j, j-1);
-            }else{
-                break;
-            }
-        }
-    }
-}
-
-bool IsPerimGt(Rectangle a, Rectangle b){
-    return Perimeter(a) > Perimeter(b) + EPSILON;
-}
 
 void TestGenerateRandomDoubleBounds(){
     int c = 0;
