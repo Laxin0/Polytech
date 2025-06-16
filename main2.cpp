@@ -1,4 +1,5 @@
 #include "data_types.h"
+#include "data_generator.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -7,31 +8,9 @@
 #define EPSILON 0.00000000001
 #define INVALID_INDEX -1
 
-int GenerateRandomInt(int min, int max){
-    int x = std::rand() % (max + 1 - min);
-    x += min;
-    return x;
-}
-
-double GenerateRandomDouble(double min, double max, int precision){
-    int randInt = GenerateRandomInt(0, pow(10, precision)-1);
-    return (max-min)/pow(10, precision) * randInt + min;
-}
-
-
-
 bool DoubleGreat(double a, double b){ return a > b + EPSILON; }
 bool DoubleLess (double a, double b){ return a + EPSILON < b; }
 bool DoubleEq   (double a, double b){ return fabs(a - b) < EPSILON; }
-
-
-Rectangle GetRandomRectangle(Interval lengthInterv, Interval widthInterv){
-    double width = GenerateRandomDouble(widthInterv.lhs, widthInterv.rhs, 2);
-    double length = GenerateRandomDouble(width, lengthInterv.rhs, 2);
-    Rectangle rect = {.width = width,
-                      .length = length};
-    return rect;
-}
 
 double Perimeter(Rectangle rect){
     return rect.length * 2 + rect.width * 2;

@@ -1,3 +1,5 @@
+#ifndef DATA_TYPES_H
+#define DATA_TYPES_H
 struct Rectangle{
     double width;
     double length;
@@ -6,3 +8,4 @@ struct Rectangle{
 struct Interval{
     double lhs, rhs;
 };
+#endif //DATA_TYPES_H
