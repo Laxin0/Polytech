@@ -1,5 +1,7 @@
 #include <cmath>
 #include <cstdlib>
+
+#include "data_generator.h"
 #include "data_types.h"
 
 int GenerateRandomInt(int min, int max){

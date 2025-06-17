@@ -1,6 +1,8 @@
 #ifndef POLY_ALGS_H
 #define POLY_ALGS_H
 
+#include "data_types.h"
+
 #define EPSILON 0.00000000001
 #define INVALID_INDEX -1
 
@@ -12,13 +14,13 @@ double Perimeter(Rectangle rect);
 
 int FindRectanglePer(Rectangle *rects, int size, Interval perInter);
 
-int FindRectangleIf(Rectangle *rects, int size, bool (*cond)(Rectangle, Interval), Interval interval);
+int FindRectangleIf(Rectangle *rects, int size, Interval interval, bool (*cond)(Rectangle, Interval));
 
 bool IsPerInInterval(Rectangle rect, Interval interval);
 
 bool IsSquareInInterval(Rectangle rect, Interval interval);
 
-void Swap(Rectangle rects[], int i, int j);
+//void Swap(Rectangle rects[], int i, int j);
 
 void InsertionSortByPer(Rectangle rects[], int size);
 

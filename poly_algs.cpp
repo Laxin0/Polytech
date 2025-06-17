@@ -20,7 +20,7 @@ int FindRectanglePer(Rectangle *rects, int size, Interval perInter){
     return INVALID_INDEX;
 }
 //TODO: поменять местами арг
-int FindRectangleIf(Rectangle *rects, int size, bool (*cond)(Rectangle, Interval), Interval interval){
+int FindRectangleIf(Rectangle *rects, int size, Interval interval, bool (*cond)(Rectangle, Interval)){
      for (int i = 0; i < size; ++i){
         if (cond(rects[i], interval)){
             return i;
