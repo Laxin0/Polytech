@@ -10,6 +10,10 @@ double Perimeter(Rectangle rect){
     return rect.length * 2 + rect.width * 2;
 }
 
+bool IsRectValid(Rectangle rect){
+    return rect.length > 0 && rect.width > 0;
+}
+
 int FindRectanglePer(Rectangle *rects, int size, Interval perInter){
     for (int i = 0; i < size; ++i){
         double per = Perimeter(rects[i]);
@@ -19,10 +23,10 @@ int FindRectanglePer(Rectangle *rects, int size, Interval perInter){
     }
     return INVALID_INDEX;
 }
-//TODO: поменять местами арг
+
 int FindRectangleIf(Rectangle *rects, int size, Interval interval, bool (*cond)(Rectangle, Interval)){
      for (int i = 0; i < size; ++i){
-        if (cond(rects[i], interval)){
+        if (IsRectValid(rects[i]) && cond(rects[i], interval)){
             return i;
         }
     }
@@ -37,7 +41,7 @@ bool IsPerInInterval(Rectangle rect, Interval interval){
     }
     return false;
 }
-bool IsSquareInInterval(Rectangle rect, Interval interval){ // [45, 55]
+bool IsAreaInInterval(Rectangle rect, Interval interval){ // [45, 55]
     double sq = rect.length * rect.width;
     if ((DoubleGreat(sq, interval.lhs) && DoubleLess(sq, interval.rhs)) ||
         DoubleEq(interval.lhs, sq) || DoubleEq(interval.rhs, sq)){
@@ -67,8 +71,8 @@ void InsertionSortByPer(Rectangle rects[], int size){
 void InsertionSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle)){
     for(int i = 1; i < size; ++i){
         for(int j = i; j > 0; --j){
-            if(!cmp(rects[j], rects[j-1])){
-                Swap(rects, j, j-1);
+            if(cmp(rects[j-1], rects[j])){
+                Swap(rects, j-1, j);
             }else{
                 break;
             }

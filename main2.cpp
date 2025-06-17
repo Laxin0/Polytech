@@ -7,7 +7,7 @@
 #include <ctime>
 #include <iostream>
 #include <cmath>
-
+//NOTE: in quicksort think anbout invalid data
 int main(){ 
     std::srand(std::time(NULL));
     Rectangle rects[] = {
@@ -17,18 +17,27 @@ int main(){
         Rectangle{-20, 50},  // 60  -1000
         Rectangle{-20, -20}, //-80  400
     };
-    
-    std::cout << "Before: " << std::endl;
-    for(int i = 0; i < 5; ++i){
-        std::cout << Perimeter(rects[i]) << std::endl;
-    }
-    //InsertionSortByPer(rects, 5);
-    InsertionSort(rects, 5, IsPerimGt);
 
-    std::cout << "After: " << std::endl;
-    for(int i = 0; i < 5; ++i){
-        std::cout << Perimeter(rects[i]) << std::endl;
+    Rectangle random_rects[10];
+    for(int i = 0; i < 10; ++i){
+        random_rects[i] = GetRandomRectangle(Interval{-10, 110}, Interval{-10, 110});
     }
+    
+    std::cout << "Before:" << std::endl;
+
+    for(int i = 0; i < 10; ++i){
+        std::cout << Perimeter(random_rects[i]) << ", ";
+    }
+    std::cout << std::endl;
+
+    InsertionSort(random_rects, 2, IsPerimGt);
+    
+    std::cout << "After:" << std::endl;
+
+    for(int i = 0; i < 10; ++i){
+        std::cout << Perimeter(random_rects[i]) << ", ";
+    }
+    std::cout << "\n\n" << std::endl;
 
     RunAllTests();
     return 0;

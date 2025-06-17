@@ -18,9 +18,7 @@ int FindRectangleIf(Rectangle *rects, int size, Interval interval, bool (*cond)(
 
 bool IsPerInInterval(Rectangle rect, Interval interval);
 
-bool IsSquareInInterval(Rectangle rect, Interval interval);
-
-//void Swap(Rectangle rects[], int i, int j);
+bool IsAreaInInterval(Rectangle rect, Interval interval);
 
 void InsertionSortByPer(Rectangle rects[], int size);
 

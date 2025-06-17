@@ -168,6 +168,83 @@ void TestFindRectangleIfBounds(){
     std::cout << "TestFindRectangleIfBounds: OK" << std::endl; 
 }
 
+void TestFindRectangleIfInvalidData(){
+    Rectangle rects[] = {
+        Rectangle{10, 10},   // 40
+        Rectangle{10, 15},   // 50
+        Rectangle{30, 40},   // 140
+        Rectangle{-20, 50},  // 60
+        Rectangle{-20, -20}, //-80 400
+    };
+    
+    int i = FindRectangleIf(rects, 5, Interval{60, 61}, IsPerInInterval); 
+    if (i != INVALID_INDEX){
+        std::cout << "Expected " << INVALID_INDEX << ", but got " << i << std::endl;
+        std::cout << "TestFindRectangleIfInvalidData: FAILED" << std::endl;
+        return;
+    }
+    i = FindRectangleIf(rects, 5, Interval{300, 500}, IsAreaInInterval); 
+    if (i != INVALID_INDEX){
+        std::cout << "Expected " << INVALID_INDEX << " but got " << i << std::endl;
+        std::cout << "TestFindRectangleIfInvalidData: FAILED" << std::endl;
+        return;
+    }
+    std::cout << "TestFindRectangleIfInvalidData: OK" << std::endl; 
+}
+
+//TODO: write checkSort for all kinds of funclion
+bool CheckSort(Rectangle rects[], int size){
+    for(int i = 0; i < size-1; ++i){
+        if (Perimeter(rects[i]) > Perimeter(rects[i+1])){
+            return false;
+        }
+    }
+    return true;
+}
+
+void TestInsertionSort(){
+    Rectangle rects[] = {
+        Rectangle{10, 10},   // 40
+        Rectangle{10, 15},   // 50
+        Rectangle{30, 40},   // 140
+        Rectangle{-20, 50},  // 60
+        Rectangle{-20, -20}, //-80 400
+    };
+
+    InsertionSort(rects, 5, IsPerimGt);
+    if (!CheckSort(rects, 5)){
+        std::cout << "TestInsertionSort: FAILED" << std::endl;
+        return;
+    }
+
+    std::cout << "TestInsertionSort: OK" << std::endl;
+}
+
+void TestInsertionSortEmptyArray(){
+    Rectangle rectsBefore[] = {
+        Rectangle{30, 40},   // 140
+        Rectangle{10, 15},   // 50
+        Rectangle{10, 10},   // 40
+    };
+    Rectangle rectsAfter[] = {
+        Rectangle{30, 40},   // 140
+        Rectangle{10, 15},   // 50
+        Rectangle{10, 10},   // 40
+    };
+
+    InsertionSort(rectsAfter, 0, IsPerimGt);
+    
+    for(int i = 0; i < 3; ++i){
+        if (!DoubleEq(Perimeter(rectsBefore[i]), Perimeter(rectsAfter[i]))){
+            std::cout << "TestInsertionSortEmptyArray: FAILED" << std::endl;
+            std::cout << "B: " << Perimeter(rectsBefore[i]) << " A: " << Perimeter(rectsAfter[i]) << std::endl;
+            return;
+        }
+    }
+    std::cout << "TestInsertionSortEmptyArray: OK" << std::endl;
+
+}
+
 void RunAllTests(){
     TestGenerateRandomDoubleBounds();
     TestGenerateRandomIntBounds();
@@ -177,6 +254,9 @@ void RunAllTests(){
     TestFindRectanglePerFound1();
     TestFindRectanglePerNotFound();
     TestFindRectangleIfBounds();
+    TestFindRectangleIfInvalidData();
+    TestInsertionSort();
+    TestInsertionSortEmptyArray();
 }
 
 
