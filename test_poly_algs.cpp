@@ -213,7 +213,7 @@ void TestInsertionSort(){
 
     InsertionSort(rects, 5, IsPerimGt);
     if (!CheckSort(rects, 5)){
-        std::cout << "TestInsertionSort: FAILED" << std::endl;
+        std::cout << "TestInsertionSortIsPerimGt: FAILED" << std::endl;
         return;
     }
 

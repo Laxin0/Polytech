@@ -10,6 +10,10 @@ double Perimeter(Rectangle rect){
     return rect.length * 2 + rect.width * 2;
 }
 
+double Area(Rectangle rect){
+    return rect.length * rect.width;
+}
+
 bool IsRectValid(Rectangle rect){
     return rect.length > 0 && rect.width > 0;
 }
@@ -82,6 +86,10 @@ void InsertionSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle
 
 bool IsPerimGt(Rectangle a, Rectangle b){
     return Perimeter(a) > Perimeter(b) + EPSILON;
+}
+
+bool IsAreaGt(Rectangle a, Rectangle b){
+    return Area(a) > Area(b) + EPSILON;
 }
 
 

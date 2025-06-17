@@ -30,7 +30,7 @@ int main(){
     }
     std::cout << std::endl;
 
-    InsertionSort(random_rects, 2, IsPerimGt);
+    InsertionSort(random_rects, 10, IsPerimGt);
     
     std::cout << "After:" << std::endl;
 

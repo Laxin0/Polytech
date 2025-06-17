@@ -12,6 +12,8 @@ bool DoubleEq   (double a, double b);
 
 double Perimeter(Rectangle rect);
 
+double Area(Rectangle rect);
+
 int FindRectanglePer(Rectangle *rects, int size, Interval perInter);
 
 int FindRectangleIf(Rectangle *rects, int size, Interval interval, bool (*cond)(Rectangle, Interval));
@@ -25,5 +27,7 @@ void InsertionSortByPer(Rectangle rects[], int size);
 void InsertionSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle));
 
 bool IsPerimGt(Rectangle a, Rectangle b);
+
+bool IsAreaGt(Rectangle a, Rectangle b);
 
 #endif
