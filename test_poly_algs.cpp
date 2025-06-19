@@ -245,6 +245,37 @@ void TestInsertionSortEmptyArray(){
 
 }
 
+void TestPartitionInvalidToEnd(){
+    Rectangle rects[] = {
+        Rectangle{-20, 50},  // 60
+        Rectangle{10, 10},   // 40
+        Rectangle{10, 15},   // 50
+        Rectangle{-20, -20}, //-80 400
+        Rectangle{30, 40},   // 140
+        Rectangle{-1, -1}
+    };
+    
+    int lastValid = Partition(rects, 0, 5, IsFirstRectInvalid);
+    std::cout << "LastValid: " << lastValid << std::endl;
+    for (int i = 0; i < 6-1; ++i){
+        std::cout << IsRectValid(rects[i]) << ", ";
+    }
+    std::cout << std::endl;
+
+    for (int i = 0; i <= lastValid; ++i){
+        if (!IsRectValid(rects[i])){
+            std::cout << "TestPartitionInvalidToEnd: FAILED" << std::endl;
+            return;
+        }
+    }
+    for (int i = lastValid+1; i < 6; ++i){
+        if (IsRectValid(rects[i])){
+            std::cout << "TestPartitionInvalidToEnd: FAILED" << std::endl;
+            return;
+        }
+    }
+}
+
 void RunAllTests(){
     TestGenerateRandomDoubleBounds();
     TestGenerateRandomIntBounds();
@@ -257,6 +288,7 @@ void RunAllTests(){
     TestFindRectangleIfInvalidData();
     TestInsertionSort();
     TestInsertionSortEmptyArray();
+    TestPartitionInvalidToEnd();
 }
 
 

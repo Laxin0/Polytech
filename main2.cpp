@@ -7,9 +7,13 @@
 #include <ctime>
 #include <iostream>
 #include <cmath>
-//NOTE: in quicksort think anbout invalid data
-int main(){ 
+//TODO: TestPartition failed
+#define TEST
+int main(){
     std::srand(std::time(NULL));
+#ifdef TEST
+    RunAllTests();
+#else
 
     Rectangle random_rects[10];
     for(int i = 0; i < 10; ++i){
@@ -25,7 +29,7 @@ int main(){
     std::cout << std::endl;
 
     //InsertionSort(random_rects, 10, IsPerimGt);
-    std::cout << "Last valid: " << QuickSortSafe(random_rects, 0, 10-1, IsPerimGt) << std::endl;
+    std::cout << "Last valid: " << Partition(random_rects, 0, 10-1, IsFirstRectInvalid) << std::endl;
 
     std::cout << "After:" << std::endl;
 
@@ -35,6 +39,6 @@ int main(){
     }
     std::cout << "\n\n" << std::endl;
 
-    // RunAllTests();
+#endif //TEST
     return 0;
 }
