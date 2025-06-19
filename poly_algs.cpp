@@ -84,6 +84,27 @@ void InsertionSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle
     }
 }
 
+int Partition(Rectangle rects[], int i, int j, bool (*cmp)(Rectangle, Rectangle)){
+    int pivot = j;
+    int low = i;
+    for(int i = low; i < j; ++i){
+        if (!cmp(rects[i], rects[pivot])){
+            Swap(rects, i, low);
+            low++;
+        }
+    }
+    Swap(rects, pivot, low);
+    return low;
+}
+
+void QuickSort(Rectangle rects[], int j, int k, bool (*cmp)(Rectangle, Rectangle)){
+    if(j >= k) return;
+    
+    int i = Partition(rects, j, k, cmp);
+    QuickSort(rects, j, i-1, cmp);
+    QuickSort(rects, i+1, k, cmp);
+}
+
 bool IsPerimGt(Rectangle a, Rectangle b){
     return Perimeter(a) > Perimeter(b) + EPSILON;
 }

@@ -193,9 +193,9 @@ void TestFindRectangleIfInvalidData(){
 }
 
 //TODO: write checkSort for all kinds of funclion
-bool CheckSort(Rectangle rects[], int size){
+bool CheckSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle)){
     for(int i = 0; i < size-1; ++i){
-        if (Perimeter(rects[i]) > Perimeter(rects[i+1])){
+        if (cmp(rects[i], rects[i+1])){
             return false;
         }
     }
@@ -212,7 +212,7 @@ void TestInsertionSort(){
     };
 
     InsertionSort(rects, 5, IsPerimGt);
-    if (!CheckSort(rects, 5)){
+    if (!CheckSort(rects, 5, IsPerimGt)){
         std::cout << "TestInsertionSortIsPerimGt: FAILED" << std::endl;
         return;
     }

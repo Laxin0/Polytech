@@ -30,8 +30,9 @@ int main(){
     }
     std::cout << std::endl;
 
-    InsertionSort(random_rects, 10, IsPerimGt);
-    
+    //InsertionSort(random_rects, 10, IsPerimGt);
+    QuickSort(random_rects, 0, 10-1, IsPerimGt);
+
     std::cout << "After:" << std::endl;
 
     for(int i = 0; i < 10; ++i){
@@ -39,6 +40,6 @@ int main(){
     }
     std::cout << "\n\n" << std::endl;
 
-    RunAllTests();
+    // RunAllTests();
     return 0;
 }

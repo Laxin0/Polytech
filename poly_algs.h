@@ -26,6 +26,8 @@ void InsertionSortByPer(Rectangle rects[], int size);
 
 void InsertionSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle));
 
+void QuickSort(Rectangle rects[], int j, int k, bool (*cmp)(Rectangle, Rectangle));
+
 bool IsPerimGt(Rectangle a, Rectangle b);
 
 bool IsAreaGt(Rectangle a, Rectangle b);
