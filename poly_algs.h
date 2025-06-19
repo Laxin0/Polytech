@@ -10,6 +10,10 @@ bool DoubleGreat(double a, double b);
 bool DoubleLess (double a, double b);
 bool DoubleEq   (double a, double b);
 
+bool IsRectValid(Rectangle rect);
+
+bool IsFirstRectInvalid(Rectangle a, Rectangle b);
+
 double Perimeter(Rectangle rect);
 
 double Area(Rectangle rect);
@@ -27,6 +31,10 @@ void InsertionSortByPer(Rectangle rects[], int size);
 void InsertionSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle));
 
 void QuickSort(Rectangle rects[], int j, int k, bool (*cmp)(Rectangle, Rectangle));
+
+int QuickSortSafe(Rectangle rects[], int j, int k, bool (*cmp)(Rectangle, Rectangle));
+
+int Partition(Rectangle rects[], int i, int j, bool (*cmp)(Rectangle, Rectangle));
 
 bool IsPerimGt(Rectangle a, Rectangle b);
 

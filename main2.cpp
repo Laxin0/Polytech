@@ -10,13 +10,6 @@
 //NOTE: in quicksort think anbout invalid data
 int main(){ 
     std::srand(std::time(NULL));
-    Rectangle rects[] = {
-        Rectangle{10, 10},   // 40  20
-        Rectangle{10, 15},   // 50  150
-        Rectangle{30, 40},   // 140 1200
-        Rectangle{-20, 50},  // 60  -1000
-        Rectangle{-20, -20}, //-80  400
-    };
 
     Rectangle random_rects[10];
     for(int i = 0; i < 10; ++i){
@@ -26,17 +19,19 @@ int main(){
     std::cout << "Before:" << std::endl;
 
     for(int i = 0; i < 10; ++i){
-        std::cout << Perimeter(random_rects[i]) << ", ";
+        std::cout << Perimeter(random_rects[i]) << " (";
+        std::cout << IsRectValid(random_rects[i]) << "), ";
     }
     std::cout << std::endl;
 
     //InsertionSort(random_rects, 10, IsPerimGt);
-    QuickSort(random_rects, 0, 10-1, IsPerimGt);
+    std::cout << "Last valid: " << QuickSortSafe(random_rects, 0, 10-1, IsPerimGt) << std::endl;
 
     std::cout << "After:" << std::endl;
 
     for(int i = 0; i < 10; ++i){
-        std::cout << Perimeter(random_rects[i]) << ", ";
+        std::cout << Perimeter(random_rects[i]) << " (";
+        std::cout << IsRectValid(random_rects[i]) << "), ";
     }
     std::cout << "\n\n" << std::endl;
 

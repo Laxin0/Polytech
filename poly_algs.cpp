@@ -18,6 +18,11 @@ bool IsRectValid(Rectangle rect){
     return rect.length > 0 && rect.width > 0;
 }
 
+bool IsFirstRectInvalid(Rectangle a, Rectangle b){
+    (void)b;
+    return !IsRectValid(a);
+}
+
 int FindRectanglePer(Rectangle *rects, int size, Interval perInter){
     for (int i = 0; i < size; ++i){
         double per = Perimeter(rects[i]);
@@ -84,6 +89,8 @@ void InsertionSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle
     }
 }
 
+
+// TODO: check bouds
 int Partition(Rectangle rects[], int i, int j, bool (*cmp)(Rectangle, Rectangle)){
     int pivot = j;
     int low = i;
@@ -103,6 +110,12 @@ void QuickSort(Rectangle rects[], int j, int k, bool (*cmp)(Rectangle, Rectangle
     int i = Partition(rects, j, k, cmp);
     QuickSort(rects, j, i-1, cmp);
     QuickSort(rects, i+1, k, cmp);
+}
+
+int QuickSortSafe(Rectangle rects[], int j, int k, bool (*cmp)(Rectangle, Rectangle)){
+    int lastValid = Partition(rects, j, k, IsFirstRectInvalid);
+    QuickSort(rects, j, lastValid, cmp);
+    return lastValid;
 }
 
 bool IsPerimGt(Rectangle a, Rectangle b){
