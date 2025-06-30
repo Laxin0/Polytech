@@ -7,8 +7,13 @@
 #include <ctime>
 #include <iostream>
 #include <cmath>
-//TODO: TestPartition failed
-#define TEST
+
+/* TODO: TestPartition failed (right bound included or not).
+*        Check one more time if Partition works correctly and returns right value.
+*        If it does think how to make all functions to use one style ( `[,]` or `[,)` )
+*/
+
+// #define TEST
 int main(){
     std::srand(std::time(NULL));
 #ifdef TEST
@@ -29,7 +34,8 @@ int main(){
     std::cout << std::endl;
 
     //InsertionSort(random_rects, 10, IsPerimGt);
-    std::cout << "Last valid: " << Partition(random_rects, 0, 10-1, IsFirstRectInvalid) << std::endl;
+    std::cout << "First invalid: " <<  QuickSortSafe(random_rects, 0, 9, IsPerimGt) << std::endl;
+    //std::cout << "First invalid: " << Partition(random_rects, 0, 10-1, IsFirstRectInvalid) << std::endl;
 
     std::cout << "After:" << std::endl;
 

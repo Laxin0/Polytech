@@ -252,23 +252,25 @@ void TestPartitionInvalidToEnd(){
         Rectangle{10, 15},   // 50
         Rectangle{-20, -20}, //-80 400
         Rectangle{30, 40},   // 140
-        Rectangle{-1, -1}
+        Rectangle{-1, -1},
     };
+
+    int size = sizeof(rects)/sizeof(rects[0]);
     
-    int lastValid = Partition(rects, 0, 5, IsFirstRectInvalid);
-    std::cout << "LastValid: " << lastValid << std::endl;
-    for (int i = 0; i < 6-1; ++i){
+    int firstInvalid = Partition(rects, 0, size, IsFirstRectInvalid);
+    std::cout << "LastValid: " << firstInvalid << std::endl;
+    for (int i = 0; i < size; ++i){
         std::cout << IsRectValid(rects[i]) << ", ";
     }
     std::cout << std::endl;
 
-    for (int i = 0; i <= lastValid; ++i){
+    for (int i = 0; i < firstInvalid; ++i){
         if (!IsRectValid(rects[i])){
             std::cout << "TestPartitionInvalidToEnd: FAILED" << std::endl;
             return;
         }
     }
-    for (int i = lastValid+1; i < 6; ++i){
+    for (int i = firstInvalid; i < size; ++i){
         if (IsRectValid(rects[i])){
             std::cout << "TestPartitionInvalidToEnd: FAILED" << std::endl;
             return;
