@@ -33,8 +33,10 @@ void InsertionSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle
 void QuickSort(Rectangle rects[], int j, int k, bool (*cmp)(Rectangle, Rectangle));
 
 int QuickSortSafe(Rectangle rects[], int j, int k, bool (*cmp)(Rectangle, Rectangle));
-
+ 
 int Partition(Rectangle rects[], int i, int j, bool (*cmp)(Rectangle, Rectangle));
+
+int PartitionInvalid(Rectangle rects[], int i, int j);
 
 bool IsPerimGt(Rectangle a, Rectangle b);
 

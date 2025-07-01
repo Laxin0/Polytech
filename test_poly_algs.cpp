@@ -245,7 +245,7 @@ void TestInsertionSortEmptyArray(){
 
 }
 
-void TestPartitionInvalidToEnd(){
+void TestPartitionInvalid(){
     Rectangle rects[] = {
         Rectangle{-20, 50},  // 60
         Rectangle{10, 10},   // 40
@@ -257,25 +257,74 @@ void TestPartitionInvalidToEnd(){
 
     int size = sizeof(rects)/sizeof(rects[0]);
     
-    int firstInvalid = Partition(rects, 0, size, IsFirstRectInvalid);
-    std::cout << "LastValid: " << firstInvalid << std::endl;
-    for (int i = 0; i < size; ++i){
-        std::cout << IsRectValid(rects[i]) << ", ";
-    }
-    std::cout << std::endl;
+    int lastValid = PartitionInvalid(rects, 0, size-1);
 
-    for (int i = 0; i < firstInvalid; ++i){
+    for (int i = 0; i <= lastValid; ++i){
         if (!IsRectValid(rects[i])){
             std::cout << "TestPartitionInvalidToEnd: FAILED" << std::endl;
             return;
         }
     }
-    for (int i = firstInvalid; i < size; ++i){
+    for (int i = lastValid+1; i < size; ++i){
         if (IsRectValid(rects[i])){
             std::cout << "TestPartitionInvalidToEnd: FAILED" << std::endl;
             return;
         }
     }
+}
+
+void TestQuickSort(){
+    Rectangle rects[] = {
+        Rectangle{10, 10},   // 40
+        Rectangle{10, 15},   // 50
+        Rectangle{30, 40},   // 140
+        Rectangle{-20, 50},  // 60
+        Rectangle{-20, -20}, //-80 400
+    };
+
+    QuickSort(rects, 0, 4, IsPerimGt);
+    if (!CheckSort(rects, 5, IsPerimGt)){
+        std::cout << "TestQuickSort: FAILED" << std::endl;
+        return;
+    } 
+
+    std::cout << "TestQuickSort: OK" << std::endl;
+}
+
+void TestQuickSortSafe(){
+    Rectangle rects[] = {
+        Rectangle{10, 10},   // 40
+        Rectangle{10, 15},   // 50
+        Rectangle{30, 40},   // 140
+        Rectangle{-20, 50},  // 60
+        Rectangle{-20, -20}, //-80 400
+    };
+
+    int lastValid = QuickSortSafe(rects, 0, 4, IsPerimGt);
+    if (!CheckSort(rects, lastValid, IsPerimGt)){
+        std::cout << "TestQuickSortSafe: FAILED" << std::endl;
+        return;
+    }
+
+    std::cout << "TestQuickSortSafe: OK" << std::endl;
+}
+
+void TestQuickSortSafeAllInvalid(){
+    Rectangle rects[] = {
+        Rectangle{-10, 10},
+        Rectangle{-10, 15},
+        Rectangle{-30, 40},
+        Rectangle{-20, 50},
+        Rectangle{-20, -20}, 
+    };
+
+    int lastValid = QuickSortSafe(rects, 0, 4, IsPerimGt);
+    if (lastValid != INVALID_INDEX){
+        std::cout << "TestQuickSortSafeAllInvalid: FAILED" << std::endl;
+        return;
+    }
+
+    std::cout << "TestQuickSortSafeAllInvalid: OK" << std::endl;
 }
 
 void RunAllTests(){
@@ -290,7 +339,10 @@ void RunAllTests(){
     TestFindRectangleIfInvalidData();
     TestInsertionSort();
     TestInsertionSortEmptyArray();
-    TestPartitionInvalidToEnd();
+    TestPartitionInvalid();
+    TestQuickSort();
+    TestQuickSortSafe();
+    TestQuickSortSafeAllInvalid();
 }
 
 

@@ -87,10 +87,9 @@ void InsertionSort(Rectangle rects[], int size, bool (*cmp)(Rectangle, Rectangle
             }
         }
     }
-}
+} 
 
 
-// TODO: check bouds
 int Partition(Rectangle rects[], int i, int j, bool (*cmp)(Rectangle, Rectangle)){
     int pivot = j;
     int low = i;
@@ -104,6 +103,17 @@ int Partition(Rectangle rects[], int i, int j, bool (*cmp)(Rectangle, Rectangle)
     return low;
 }
 
+int PartitionInvalid(Rectangle rects[], int i, int j){
+    int low = i;
+    for(int i = low; i <= j; ++i){
+        if (IsRectValid(rects[i])){
+            Swap(rects, i, low);
+            low++;
+        }
+    }
+    return low-1;
+}
+
 void QuickSort(Rectangle rects[], int j, int k, bool (*cmp)(Rectangle, Rectangle)){
     if(j >= k) return;
     
@@ -113,7 +123,7 @@ void QuickSort(Rectangle rects[], int j, int k, bool (*cmp)(Rectangle, Rectangle
 }
 
 int QuickSortSafe(Rectangle rects[], int j, int k, bool (*cmp)(Rectangle, Rectangle)){
-    int lastValid = Partition(rects, j, k, IsFirstRectInvalid);
+    int lastValid = PartitionInvalid(rects, j, k);
     QuickSort(rects, j, lastValid, cmp);
     return lastValid;
 }
